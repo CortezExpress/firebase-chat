@@ -76,5 +76,6 @@
     "service": {
       "spec": false
     }
-  }
+  },
+  "packageManager": "yarn"
 }
