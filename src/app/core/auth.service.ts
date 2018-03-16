@@ -10,7 +10,7 @@ import {
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
-import { error } from 'util';
+import { Md5 } from 'ts-md5/dist/md5';
 
 interface User {
   uid: string;
@@ -67,7 +67,8 @@ export class AuthService {
       uid: user.uid,
       email: user.email || null,
       displayName: user.displayName,
-      photoURL: user.photoURL
+      photoURL: user.photoURL ||
+      "http://www.gravatar.com/avatar/" +
     }
     return userRef.set(data, { merge: true })
   }
