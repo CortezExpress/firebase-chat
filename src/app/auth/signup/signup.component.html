@@ -1,0 +1,22 @@
+<main>
+  <section>
+    <form [formGroup]="signUpForm" (ngSubmit)="signUp()">
+      <h3>Welcome To The Place Where Love Is International</h3>
+      <p>Create Your Profile</p>
+
+      <mat-form-field [formGroup]="signUpForm">
+          <input matInput placeholder="Enter Your Email" [formControl]="email" required>
+          <mat-error *ngIf="email.valid">Not a Valid Email</mat-error>
+      </mat-form-field>
+
+      <mat-form-field [formGroup]="signUpForm">
+          <input matInput placeholder="Enter Your password" [type]="hide ? 'password' : 'text'" [formControl]="password" required>
+          <mat-icon matSuffix (click)="hide = !hide">{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+          <mat-error *ngIf="password.valid">Not a Valid Password</mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button type="submit" color="accent">Sign up for Love!!!</button>
+
+    </form>
+  </section>
+</main>
