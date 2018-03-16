@@ -10,7 +10,7 @@ import {
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
-import { Md5 } from 'ts-md5/dist/md5';
+import { error } from 'util';
 
 interface User {
   uid: string;
@@ -35,18 +35,18 @@ export class AuthService {
         return Observable.of(null);
       }
     });
-  }
+  } 
 
   emailSignIn(email: string, password: string) {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
-    .then(() => console.log("You have signed in for Love"))
+    .then(() => console.log('You have signed in for Love'))
     .catch(error => console.log(error.message))
   }
 
-  emailSignUp(email:string, password: string) {
+  emailSignUp(email: string, password: string) {
     return this.afAuth.auth.createUserAndRetrieveDataWithEmailAndPassword(email, password)
     .then(user => this.updateUserData(user))
-    .then(() => console.log("You have created a Love Account!"))
+    .then(() => console.log('You have created a Love Account!'))
     .catch(error => console.log(error.message));
   }
 
@@ -54,21 +54,20 @@ export class AuthService {
   signOut () {
     return this.afAuth.auth.signOut()
     .then(() => {
-      this.router.navigate(['/'])
-    })
+      this.router.navigate(['/']);
+    });
   }
 
 
   // the reason for email, below, having possibility of null is bc twitter doesn't use email
   // if no twitter login then can delete if want. 
   private updateUserData(user) {
-    const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${user.uid}`)
+    const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${user.uid}`);
     const data: User = {
       uid: user.uid,
       email: user.email || null,
       displayName: user.displayName,
-      photoURL: user.photoURL ||
-      "http://www.gravatar.com/avatar/" +
+      photoURL: user.photoURL
     }
     return userRef.set(data, { merge: true })
   }
