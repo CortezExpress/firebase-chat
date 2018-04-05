@@ -70,14 +70,40 @@ export class AuthService {
     .catch(error => console.log(error.message))
   }
 
-
-  
-
   signOut () {
     return this.afAuth.auth.signOut()
     .then(() => {
       this.router.navigate(['/']);
     });
+  }
+
+
+googleLogin() {
+  const provider = new firebase.auth.GoogleAuthProvider()
+  return this.socialLogin(provider)
+}
+
+githubLogin() {
+  const provider = new firebase.auth.GithubAuthProvider()
+  return this.socialLogin(provider)
+}
+
+facebookLogin() {
+  const provider = new firebase.auth.FacebookAuthProvider()
+  return this.socialLogin(provider)
+}
+
+twitterLogin() {
+  const provider = new firebase.auth.TwitterAuthProvider()
+  return this.socialLogin(provider)
+}
+
+
+  private socialLogin(provider) {
+    return this.afAuth.auth.signInWithRedirect(provider)
+    .then(credential => {
+      return this.updateUserData(credential.user)
+    })
   }
 
 
