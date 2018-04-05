@@ -42,8 +42,10 @@ export class SignupComponent implements OnInit {
  get password() {
    return this.signUpForm.get('password');
  }
+
  signUp() {
-   return this.auth.emailSignUp(this.email.value, this.password.value)
+   return this.auth
+   .emailSignUp(this.email.value, this.password.value)
    .then(user => {
      if (this.signUpForm.valid) {
        this.router.navigate(['/']);

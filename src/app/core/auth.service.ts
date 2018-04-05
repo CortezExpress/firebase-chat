@@ -1,7 +1,7 @@
 import { Injectable }       from '@angular/core';
 import { Router }           from '@angular/router';
 
-// import * as firebase from 'firebase';
+import * as firebase from 'firebase';
 import { AngularFireAuth }  from 'angularfire2/auth';
 import {
   AngularFirestore,
@@ -10,7 +10,8 @@ import {
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
-import { error } from 'util';
+// import { error } from 'util';
+import { Md5 } from 'ts-md5/dist/md5';
 
 interface User {
   uid: string;
@@ -43,13 +44,34 @@ export class AuthService {
     .catch(error => console.log(error.message))
   }
 
+  // emailSignUp(email: string, password: string) {
+  //   return this.afAuth.auth.createUserAndRetrieveDataWithEmailAndPassword(email, password)
+  //   .then(user => this.updateUserData(user))
+  //   .then(() => console.log('You have created a Love Account!'))
+  //   .catch(error => console.log(error.message));
+  // }
   emailSignUp(email: string, password: string) {
-    return this.afAuth.auth.createUserAndRetrieveDataWithEmailAndPassword(email, password)
-    .then(user => this.updateUserData(user))
-    .then(() => console.log('You have created a Love Account!'))
-    .catch(error => console.log(error.message));
+    return this.afAuth.auth
+      .createUserWithEmailAndPassword(email, password)
+      .then(user => this.updateUserData(user))
+      .then(() => console.log("Welcome, your account has been created!"))
+      .then(user => {
+        this.afAuth.auth.currentUser
+          .sendEmailVerification()
+          .then(() => console.log("We sent you an email verification"))
+          .catch(error => console.log(error.message));
+      })
+      .catch(error => console.log(error.message));
   }
 
+  resetPassword(email: string) {
+    return firebase.auth().sendPasswordResetEmail(email)
+    .then(() => console.log("We've sent you a password reset link"))
+    .catch(error => console.log(error.message))
+  }
+
+
+  
 
   signOut () {
     return this.afAuth.auth.signOut()
@@ -67,7 +89,8 @@ export class AuthService {
       uid: user.uid,
       email: user.email || null,
       displayName: user.displayName,
-      photoURL: user.photoURL
+      photoURL: user.photoURL ||
+      'http://www.gravatar.com/avatar/' + Md5.hashStr(user.uid) + '?d=identicon'
     }
     return userRef.set(data, { merge: true })
   }
