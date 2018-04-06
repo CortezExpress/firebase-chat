@@ -24,6 +24,8 @@ interface User {
 export class AuthService {
   user: Observable<User>;
 
+  authState: any = null;
+
   constructor(
     private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
@@ -35,8 +37,19 @@ export class AuthService {
       } else {
         return Observable.of(null);
       }
-    });
-  } 
+    })
+
+    this.afAuth.authState.subscribe(data => this.authState = data);
+  }
+
+  get authenticated(): boolean {
+    return this.authState !== null;
+  }
+
+  get currentUserId(): string {
+    return this.authenticated ? this.authState.uid : null;
+  }
+
 
   emailSignIn(email: string, password: string) {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
@@ -100,7 +113,7 @@ twitterLogin() {
 
 
   private socialLogin(provider) {
-    return this.afAuth.auth.signInWithRedirect(provider)
+    return this.afAuth.auth.signInWithPopup(provider)
     .then(credential => {
       return this.updateUserData(credential.user)
     })
