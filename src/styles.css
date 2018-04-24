@@ -1,2 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+:root {
+    --app-background-color: #f6f6f6;
+    --app-primary-color: #E34234;
+}
+body {
+    margin: 0;
+    background-color: var(--app-background-color);
+}
+.spacer {
+    flex: 1 1 auto;
+}
