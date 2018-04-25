@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { Location } from '@angular/common';
 import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
 
 import { AuthService } from '../../core/auth.service';
@@ -21,7 +21,8 @@ export class UserDashboardComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private userService: UserService,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
+    private location: Location
   ) { }
 
   ngOnInit() {
@@ -65,4 +66,7 @@ export class UserDashboardComponent implements OnInit {
     return this.userService.updateUserData(data)
   }
 
+  goBack() {
+    this.location.back();
+  }
 }
