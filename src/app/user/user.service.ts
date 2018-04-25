@@ -42,7 +42,7 @@ export class UserService {
     const user = this.auth.authState
     return user
     .updateEmail(email)
-    .then(() => this.afs.doc(`users/${user.uid}`).update({email}))
+    .then(() => this.afs.doc(`users/${user.uid}`).update({ email }))
     .then(() => console.log('Your email has been updated to: ' + email))
     .then(user => {
       this.auth.authState
@@ -51,6 +51,11 @@ export class UserService {
       .catch(error => console.log(error.message));
     })
     .catch(error => console.log(error.message));
+  }
+
+  updateUserData(data: any) {
+    const uid = this.auth.currentUserId
+    return this.afs.doc(`users/${uid}`).update(data);
   }
 
 }
